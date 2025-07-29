@@ -1,48 +1,129 @@
-## How to create a VM with QEMU :
+# 🌧️ RAINFALL - Projet de Sécurité
 
-qemu-system-x86_64 -m 4G -smp 4 -cpu host -enable-kvm -cdrom RainFall.iso  -net nic -net user,hostfwd=tcp::2222-:4242 -daemonize
+## 📋 Présentation
 
-## How to connect :
+**Rainfall** est un projet de sécurité informatique qui propose une série de **10 niveaux d'exploitation** + **4 niveaux bonus**, conçus pour apprendre et pratiquer les techniques de **reverse engineering** et d'**exploitation de vulnérabilités**.
 
-ssh level0@localhost -p 2222
-password: level00
+### Objectifs du projet
+- **Apprendre** les vulnérabilités classiques (buffer overflow, format string, etc.)
+- **Pratiquer** l'analyse de binaires avec des outils comme Ghidra, GDB
+- **Maîtriser** les techniques d'exploitation en environnement contrôlé
+- **Comprendre** la gestion mémoire en C (stack, heap, GOT, etc.)
 
-## How to use scp (dl with secure protocole) :
+### Niveaux disponibles
+- **Niveaux 0-9** : Vulnérabilités progressives
+- **Bonus 0-3** : Techniques avancées
+- **End** : Niveau final (⚠️ Ne pas tenter de devenir root !)
 
-scp -P 2222 level00@localhost:~/ /tmp
+## 🛠️ Fichiers du projet
 
-## How to get the flag :
+### 📁 Structure
+```
+rainfall_intra/
+├── level0/          # Niveau 0 - Argument simple
+├── level1/          # Niveau 1 - Buffer overflow classique
+├── level2/          # Niveau 2 - Heap exploitation
+├── level3/          # Niveau 3 - Format string basique
+├── level4/          # Niveau 4 - Format string optimisé
+├── level5/          # Niveau 5 - GOT overwrite
+├── level6/          # Niveau 6 - Function pointer overwrite
+├── level7/          # Niveau 7 - Double heap overflow
+├── level8/          # Niveau 8 - Use After Free
+├── level9/          # Niveau 9 - À découvrir
+├── bonus0-3/        # Niveaux bonus
+├── TOOLS.md         # Outils et scripts d'automatisation
+├── UTILS.md         # Mémoire en C et concepts techniques
+├── start_iso.sh     # Script de démarrage de la VM
+├── scp.sh           # Script de copie automatique
+└── ssh.sh           # Script de connexion automatique
+```
 
-level00@SnowCrash:~$ su flag00
-Password:
-Don't forget to launch getflag !
-flag00@SnowCrash:~$ getflag
-Check flag.Here is your token : ?????????????????
-flag00@SnowCrash:~$ su level01
-Password:
-level01@SnowCrash:~$ 
+### 📄 Fichiers de documentation
 
-## How to install Wireshark:
+#### **TOOLS.md**
+Contient tous les outils et scripts pour faciliter l'exploitation :
+- **Scripts automatisés** : `./ssh.sh` et `./scp.sh` pour la navigation
+- **Outils d'analyse** : CYCLIC, commandes FIND
+- **Scripts de démarrage** : `start_iso.sh` pour la VM
 
-sudo add-apt-repository ppa:wireshark-dev/stable
-sudo apt-get update
-sudo apt-get install wireshark
+#### **UTILS.md**
+Guide technique sur la mémoire en C :
+- **Stack (Pile)** : Variables locales, adresses de retour
+- **Heap (Tas)** : Allocations dynamiques, malloc/free
+- **Concepts** : Gestion mémoire, vulnérabilités
 
-## How to install John The Ripper
+## 🚀 Quick Start
 
-sudo snap install john-the-ripper
+### 1. Démarrage de la VM
 
-## Roles
+```bash
+# Démarrer la VM Rainfall
+./start_iso.sh
 
-cjunker level00 rot13
-flemaitr level01 john the ripper
-flemaitr level02 wireshark
-cjunker level03 echo
-cjunker level04 perl
-flemaitr level05 openaserver
-cjunker level06 php regex
-flemaitr level07 buffer overflow
-flemaitr level08 lien symbolique
-cjunker level09 decipher
+# Vérifier que la VM est accessible
+ping -c 1 localhost
+```
 
+### 2. Première connexion (Level 0)
+
+```bash
+# Se connecter au level 0
+./ssh.sh 0
+
+# Le script utilise automatiquement le mot de passe "level0"
+# Vous êtes maintenant connecté à la VM
+```
+
+### 3. Exploitation du Level 0
+
+```bash
+# Dans la VM, exécuter le binaire
+./level0 423
+
+# Récupérer le flag
+cat /home/user/level1/.pass
+```
+
+### 4. Copie des fichiers
+
+```bash
+# Copier le répertoire home du level 0
+./scp.sh.sh 0
+
+# Cela crée un dossier level0_home/ avec tous les fichiers
+```
+
+### 5. Navigation vers le niveau suivant
+
+```bash
+# Se connecter au level 1 avec le flag du level 0
+./ssh.sh 1
+
+# Le script utilise automatiquement le flag du level 0 comme mot de passe
+```
+
+## 📚 Exemple complet Level 0 → Level 1
+
+```bash
+# 1. Démarrage
+./start_iso.sh
+
+# 2. Connexion level 0
+./ssh.sh 0
+
+# 3. Exploitation
+./level0 423
+# → Obtient un shell avec privilèges level1
+
+# 4. Récupération du flag
+cat /home/user/level1/.pass
+# → 1fe8a524fa4bec01ca4ea2a869af2a02260d4a7d5fe7e7c24d8617e6dca12d3a
+
+# 5. Copie des fichiers
+./scp.sh 0
+
+# 6. Connexion au niveau suivant
+./ssh.sh 1
+# → Utilise automatiquement le flag comme mot de passe
+```
 
