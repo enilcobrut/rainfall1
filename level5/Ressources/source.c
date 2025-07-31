@@ -1,23 +1,24 @@
 
-void o(void)
+#include <stdio.h>
+#include <stdlib.h>
 
+static void o(void)
 {
-  system("/bin/sh");
-  _exit(1);
-}
-void n(void)
-
-{
-  char local_20c [520];
-  
-  fgets(local_20c,0x200,stdin);
-  printf(local_20c);
-  exit(1);
+    system("/bin/sh");
+    _exit(1);
 }
 
-void main(void)
-
+static void n(void)
 {
-  n();
-  return;
+    char buffer[520];
+
+    fgets(buffer, sizeof(buffer), stdin);
+    printf(buffer);               /* format string vulnerability */
+    exit(1);
+}
+
+int main(void)
+{
+    n();
+    return 0;
 }
