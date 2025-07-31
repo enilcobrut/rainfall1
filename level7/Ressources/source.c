@@ -1,34 +1,33 @@
-// 080484f4 m address  
-void m(void *param_1,int param_2,char *param_3,int param_4,int param_5)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
+static char c[0x44];
+
+/* Print the stored string with a timestamp */
+static void m(void)
 {
-  time_t tVar1;
-  
-  tVar1 = time((time_t *)0x0);
-  printf("%s - %d\n",c,tVar1);
-  return;
+    time_t now = time(NULL);
+    printf("%s - %ld\n", c, now);
 }
 
-undefined4 main(undefined4 argc,int argv)
-
+int main(int argc, char **av)
 {
-  undefined4 *puVar1;
-  void *pvVar2;
-  undefined4 *puVar3;
-  FILE *__stream;
-  
-  puVar1 = (undefined4 *)malloc(8);
-  *puVar1 = 1;
-  pvVar2 = malloc(8);
-  puVar1[1] = pvVar2;
-  puVar3 = (undefined4 *)malloc(8);
-  *puVar3 = 2;
-  pvVar2 = malloc(8);
-  puVar3[1] = pvVar2;
-  strcpy((char *)puVar1[1],*(char **)(av[1]));
-  strcpy((char *)puVar3[1],*(char **)(av[2]));
-  __stream = fopen("/home/user/level8/.pass","r");
-  fgets(c,0x44,__stream);
-  puts("~~");
-  return 0;
+    /* allocate and prepare two structures */
+    void **a = malloc(8);
+    a[0] = (void *)1;
+    a[1] = malloc(8);
+
+    void **b = malloc(8);
+    b[0] = (void *)2;
+    b[1] = malloc(8);
+
+    strcpy((char *)a[1], av[1]);
+    strcpy((char *)b[1], av[2]);
+
+    FILE *f = fopen("/home/user/level8/.pass", "r");
+    fgets(c, sizeof(c), f);
+    puts("~~");
+    return 0;
 }
