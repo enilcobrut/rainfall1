@@ -1,35 +1,33 @@
 
-/* N::setAnnotation(char*) */
-// 0804870e
-void __thiscall N::setAnnotation(N *this,char *param_1)
+#include <cstring>
+#include <cstdlib>
 
+class N {
+public:
+    N(int type) : type(type) {}
+    virtual void operator()(N *other) {}
+
+    void setAnnotation(const char *str)
+    {
+        size_t len = strlen(str);
+        memcpy(annotation, str, len);
+    }
+
+private:
+    int   type;
+    char  annotation[0x64];
+};
+
+int main(int argc, char **argv)
 {
-  size_t __n;
-  
-  __n = strlen(param_1);
-  memcpy(this + 4,param_1,__n);
-  return;
-}
+    if (argc < 2)
+        _exit(1);
 
-
-
-void main(int param_1,int param_2)
-
-{
-  N *this;
-  undefined4 *this_00;
-  
-  if (param_1 < 2) {
-                    /* WARNING: Subroutine does not return */
-    _exit(1);
-  }
-  this = (N *)operator.new(0x6c);
-  N::N(this,5);
-  this_00 = (undefined4 *)operator.new(0x6c);
-  N::N((N *)this_00,6);
-  N::setAnnotation(this,*(char **)(param_2 + 4));
-  (**(code **)*this_00)(this_00,this);
-  return;
+    N *a = new N(5);
+    N *b = new N(6);
+    a->setAnnotation(argv[1]);
+    (*b)(a);
+    return 0;
 }
 
 

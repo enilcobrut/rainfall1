@@ -1,20 +1,28 @@
 
-void v(void)
+#include <stdio.h>
+#include <stdlib.h>
 
+extern int m;
+
+/*
+ * Reads a line from stdin and prints it back using printf directly,
+ * creating a classic format string vulnerability.  If the global
+ * variable `m` equals 0x40, a shell is spawned.
+ */
+static void v(void)
 {
-  char local_20c [520];
-  
-  fgets(local_20c,0x200,stdin);
-  printf(local_20c);
-  if (m == 0x40) { // 64 
-    fwrite("Wait what?!\n",1,0xc,stdout);
-    system("/bin/sh");
-  }
-  return;
+    char buffer[520];
+
+    fgets(buffer, sizeof(buffer), stdin);
+    printf(buffer);                 /* intentional vulnerability */
+    if (m == 0x40) {
+        fwrite("Wait what?!\n", 1, 12, stdout);
+        system("/bin/sh");
+    }
 }
-void main(void)
 
+int main(void)
 {
-  v();
-  return;
+    v();
+    return 0;
 }

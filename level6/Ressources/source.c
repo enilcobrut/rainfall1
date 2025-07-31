@@ -1,26 +1,25 @@
-void n(void)
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+/* Print the content of the next level's password file */
+static void n(void)
 {
-  system("/bin/cat /home/user/level7/.pass");
-  return;
+    system("/bin/cat /home/user/level7/.pass");
 }
 
-void m(void *param_1,int param_2,char *param_3,int param_4,int param_5)
-
+/* Default function used by a function pointer */
+static void m(void)
 {
-  puts("Nope");
-  return;
+    puts("Nope");
 }
-void main(undefined4 param_1,int param_2)
 
+int main(int argc, char **argv)
 {
-  char *__dest;
-  code **ppcVar1;
-  
-  __dest = (char *)malloc(0x40);
-  ppcVar1 = (code **)malloc(4);
-  *ppcVar1 = m;
-  strcpy(__dest,*(char **)(param_2 + 4));
-  (**ppcVar1)();
-  return;
+    char *buffer = malloc(0x40);
+    void (**fp)(void) = malloc(sizeof(*fp));
+    *fp = m;
+    strcpy(buffer, argv[1]);
+    (*fp)();
+    return 0;
 }
